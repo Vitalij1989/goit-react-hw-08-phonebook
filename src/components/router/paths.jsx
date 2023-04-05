@@ -1,5 +1,6 @@
 export const PAGE_NAMES = {
   homepage: '/',
-  login: '/login',
-  register: 'register',
+  contacts: '/contacts',
+  login: '/users/login',
+  register: '/users/register',
 };

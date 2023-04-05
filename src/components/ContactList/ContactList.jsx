@@ -1,63 +1,109 @@
-import { ImUser, ImBin } from 'react-icons/im';
-import { useDispatch, useSelector } from 'react-redux';
-import { getError, getFilteredContacts, getIsLoading } from 'redux/selectors';
-import { deleteContact } from 'redux/operations';
-
+import { Wrap } from './ContactList.styled';
+import propTypes from 'prop-types';
+import * as React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  ListBtn,
-  ContactsTable,
-  ContactsTableHead,
-  ContactsTableRow,
-  ContactsTableCeil,
-  ContactsFlexCeil,
-  Loading,
-} from './ContactList.styled';
+  useDeleteContactMutation,
+  useFetchContactsQuery,
+} from 'redux/contactsApi';
+import { ThreeDots } from 'react-loader-spinner';
+import { useSelector } from 'react-redux';
+import { getFilterContacts } from 'redux/filterContacts';
 
 export const ContactList = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(getFilteredContacts);
-  const error = useSelector(getError);
-  const isLoading = useSelector(getIsLoading);
+  const { data, error, isLoading } = useFetchContactsQuery();
+  const filter = useSelector(getFilterContacts);
+  const [deleteContact, { isLoading: loading }] = useDeleteContactMutation();
+
+  const list =
+    filter !== ''
+      ? data.filter(item =>
+          item.name.toLowerCase().includes(filter.toLowerCase())
+        )
+      : data;
 
   return (
     <>
-      {!isLoading && !error ? (
-        <ContactsTable>
-          <thead>
-            <tr>
-              <ContactsTableHead>Name</ContactsTableHead>
-              <ContactsTableHead>Phone number</ContactsTableHead>
-              <ContactsTableHead>
-                Contacts ({contacts.length})
-              </ContactsTableHead>
-            </tr>
-          </thead>
-
-          <tbody>
-            {contacts.map(({ id, name, phone }) => {
-              return (
-                <ContactsTableRow key={id}>
-                  <ContactsFlexCeil>
-                    <ImUser size="20" />
-                    {name}
-                  </ContactsFlexCeil>
-                  <ContactsTableCeil>{phone}</ContactsTableCeil>
-                  <ContactsTableCeil>
-                    <ListBtn
-                      type="button"
-                      onClick={() => dispatch(deleteContact(id))}
-                    >
-                      <ImBin size="20" />
-                    </ListBtn>
-                  </ContactsTableCeil>
-                </ContactsTableRow>
-              );
-            })}
-          </tbody>
-        </ContactsTable>
-      ) : (
-        <Loading>Loading...</Loading>
-      )}
+      <Wrap>
+        <List
+          sx={{
+            width: 400,
+            maxWidth: 460,
+          }}
+        >
+          {error ? (
+            <p>Oh no, We could not find your contacts</p>
+          ) : isLoading ? (
+            <Wrap>
+              <ThreeDots
+                height="80"
+                width="80"
+                radius="9"
+                color="#4fa94d"
+                ariaLabel="three-dots-loading"
+                visible={true}
+              />
+            </Wrap>
+          ) : data ? (
+            list.map(contact => (
+              <ListItem alignItems="flex-start" key={contact.id}>
+                <ListItemAvatar>
+                  <Avatar
+                    alt={contact.name}
+                    src="https://cdn-icons-png.flaticon.com/512/5480/5480725.png"
+                  />
+                </ListItemAvatar>
+                <ListItemText
+                  sx={{ fontSize: '36px' }}
+                  primary={contact.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {contact.number}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+                <Button
+                  sx={{
+                    top: '10px',
+                  }}
+                  color="success"
+                  name={contact.id}
+                  onClick={() => deleteContact(contact.id)}
+                  variant="outlined"
+                  startIcon={<DeleteIcon />}
+                  disabled={loading}
+                >
+                  Delete
+                </Button>
+              </ListItem>
+            ))
+          ) : null}
+        </List>
+      </Wrap>
     </>
   );
+};
+
+ContactList.propTypes = {
+  contacts: propTypes.arrayOf(
+    propTypes.exact({
+      id: propTypes.string.isRequired,
+      name: propTypes.string.isRequired,
+      number: propTypes.string.isRequired,
+    })
+  ),
 };

@@ -1,42 +1,48 @@
-// import { useState, useEffect } from 'react';
-
-// import { nanoid } from 'nanoid';
-
-import { GlobalStyle } from './GlobalStyle';
-import { Layout } from './GlobalStyle/Layout/Layout.styled';
-
-import { Section } from './Section';
-import { ContactForm } from './ContactForm';
-import { ContactList } from './ContactList';
-import { Filter } from './Filter';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
-// import data from '../data/contacts';
-
-import { fetchContacts } from 'redux/operations';
-import { useEffect } from 'react';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { PAGE_NAMES } from './Router/paths';
+import { MainLayouts } from './Layouts/MainLayouts/MainLayouts';
+import { Homepage } from 'pages/Homepage/Homepage';
+import { Contacts } from 'pages/Contacts/Contacts';
+import { Registration } from './Registration/Registration';
+import { Login } from './Login/Login';
+import { PrivateRouter } from './PrivateRouter/PrivateRouter';
+import { PublicRouter } from './PublicRouter/PublicRouter';
+import { ErrorPage } from 'pages/ErrorPage';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
   return (
-    <Layout>
-      <Section title="Add contact">
-        <ContactForm />
-      </Section>
-      {contacts.length > 0 && (
-        <Section title="Contacts" Content={<Filter />}>
-          <ContactList />
-        </Section>
-      )}
-
-      <GlobalStyle />
-    </Layout>
+    <>
+      <Routes>
+        <Route path={PAGE_NAMES.homepage} element={<MainLayouts />}>
+          <Route index path={PAGE_NAMES.homepage} element={<Homepage />} />
+          <Route
+            path={PAGE_NAMES.contacts}
+            element={
+              <PrivateRouter>
+                <Contacts />
+              </PrivateRouter>
+            }
+          />
+          <Route
+            path={PAGE_NAMES.register}
+            element={
+              <PublicRouter>
+                <Registration />
+              </PublicRouter>
+            }
+          />
+          <Route
+            path={PAGE_NAMES.login}
+            element={
+              <PublicRouter>
+                <Login />
+              </PublicRouter>
+            }
+          />
+          <Route path="/*" element={<ErrorPage />} />
+        </Route>
+      </Routes>
+    </>
   );
 };

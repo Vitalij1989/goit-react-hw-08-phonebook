@@ -1,73 +1,83 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { ContactsForm, ContactFormBtn } from './ContactForm.styled';
+import { useState } from 'react';
+import { TextField } from '@mui/material';
 import {
-  Form,
-  LabelContainer,
-  Label,
-  InputContainer,
-  Input,
-  Button,
-} from './ContactForm.styled';
-
-import { getContacts } from 'redux/selectors';
-import { addContact } from 'redux/operations';
+  useAddContactsMutation,
+  useFetchContactsQuery,
+} from 'redux/contactsApi';
+import { ThreeDots } from 'react-loader-spinner';
 
 export const ContactForm = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const { data } = useFetchContactsQuery();
+  const [addContact, { isLoading }] = useAddContactsMutation();
 
-  const handleSubmit = e => {
+  const handleFormSubmit = e => {
     e.preventDefault();
 
-    const contact = {
-      name: e.currentTarget.elements.name.value,
-      number: e.currentTarget.elements.number.value,
-    };
-
-    const currentName = contacts.find(
-      ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
-    );
-
-    if (currentName) {
-      console.log(currentName);
-      alert(`${currentName.name} is already exist!`);
+    if (data.some(item => item.name === name)) {
+      alert(`${name} is already is contacts`);
+      setName('');
+      setPhone('');
       return;
     }
 
-    dispatch(addContact(contact));
-
-    e.target.reset();
+    addContact({ name: name, number: phone });
+    setName('');
+    setPhone('');
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <InputContainer>
-        <LabelContainer>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            placeholder=" "
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          ></Input>
-          <Label htmlFor="name">Name</Label>
-        </LabelContainer>
-
-        <LabelContainer>
-          <Input
-            type="tel"
-            id="number"
-            name="number"
-            placeholder=" "
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          ></Input>
-          <Label>Number</Label>
-        </LabelContainer>
-      </InputContainer>
-      <Button>Add contact</Button>
-    </Form>
+    <>
+      <ContactsForm onSubmit={handleFormSubmit}>
+        <TextField
+          sx={{
+            maxWidth: '350px',
+            width: '100%',
+          }}
+          onChange={e => setName(e.target.value)}
+          type="text"
+          id="outlined-basic"
+          name="name"
+          value={name}
+          label="Name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          required
+          variant="outlined"
+        />
+        <TextField
+          sx={{
+            maxWidth: '350px',
+            width: '100%',
+          }}
+          type="tel"
+          id="outlined-basic"
+          name="number"
+          label="Number"
+          value={phone}
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          variant="outlined"
+          onChange={e => setPhone(e.target.value)}
+        />
+        <ContactFormBtn>
+          {isLoading ? (
+            <ThreeDots
+              height="40"
+              width="40"
+              radius="9"
+              color="#ffffff"
+              ariaLabel="three-dots-loading"
+              visible={true}
+            />
+          ) : (
+            <>+ Contact</>
+          )}
+        </ContactFormBtn>
+      </ContactsForm>
+    </>
   );
 };

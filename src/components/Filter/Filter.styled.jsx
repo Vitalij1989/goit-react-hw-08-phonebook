@@ -1,32 +1,31 @@
 import styled from 'styled-components';
 
-export const FilterContainer = styled.div`
-  position: relative;
-`;
-
-export const FilterLabel = styled.label`
-  position: absolute;
-  top: 10px;
-  left: 9px;
-  padding: 0 5px;
-  opacity: 0.8;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  pointer-events: none;
+export const FilterField = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
+  row-gap: 10px;
 `;
 
 export const FilterInput = styled.input`
-  padding: 8px;
-  background: transparent;
-  border: 2px solid #rgb(48, 39, 39);
-  border-radius: 5px;
-  :focus {
-    outline: 1px solid #rgb(48, 39, 39);
+  width: 100%;
+  max-width: 350px;
+  height: 10px;
+  border: 1px solid rgba(33, 33, 33, 0.2);
+  border-radius: 4px;
+  padding: 12px 12px;
+  transition: border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  &:focus,
+  &:focus {
+    border-color: #2196f3;
   }
-  :focus ~ label,
-  :not(:placeholder-shown) ~ label {
-    top: -8px;
-    font-size: 12px;
-    background-color: white;
-    opacity: 1;
-  }
+`;
+export const FilterLabel = styled.label`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.67;
+  letter-spacing: 0.01em;
+  color: #212020;
+  display: block;
 `;

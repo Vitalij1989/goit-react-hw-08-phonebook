@@ -1,64 +1,46 @@
 import styled from 'styled-components';
 
-export const Form = styled.form`
+export const ContactsForm = styled.form`
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 20px 0;
-`;
-
-export const LabelContainer = styled.div`
-  position: relative;
-`;
-
-export const Label = styled.label`
-  position: absolute;
-  top: 10px;
-  left: 9px;
-  padding: 0 5px;
-  opacity: 0.8;
-
-  pointer-events: none;
-`;
-
-export const InputContainer = styled.div`
-  display: flex;
-  justify-content: center;
+  row-gap: 10px;
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 30px;
   gap: 30px;
-  margin-bottom: 20px;
+  
 `;
 
-export const Input = styled.input`
-  padding: 8px;
-  background: transparent;
-  border: 2px solid #rgb(48, 39, 39);
-  border-radius: 5px;
-  :focus {
-    outline: 1px solid #rgb(48, 39, 39);
-  }
-  :focus ~ label,
-  :not(:placeholder-shown) ~ label {
-    top: -8px;
-    font-size: 12px;
-    background-color: white;
-    opacity: 1;
-  }
+export const ContactFormLabel = styled.label`
+  font-size: 16px;
+  line-height: 1.67;
+  letter-spacing: 0.01em;
+  font-family: 'Times New Roman', Times, serif;
+  color: #757575;
+  display: block;
 `;
 
-export const Button = styled.button.attrs({ type: 'submit' })`
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  padding: 10px 30px;
-  margin-bottom: 20px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  background-color: #e02121;
+export const ContactFormBtn = styled.button`
+  text-transform: uppercase;
+
+  color: #07345a;
   cursor: pointer;
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  :hover,
-  :focus {
-    background-color: #97d372;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #07345a;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  &:focus,
+  &:hover {
+    background-color: #ffff01;
+    border: 2px solid rgba(0, 0, 0, 0);
+    color: #ff0101;
+    
   }
 `;
