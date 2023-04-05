@@ -10,8 +10,9 @@ export const ErrorPageWrap = styled.div`
 
 export const ErrorPageTitle = styled.h2`
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-weight: 900;
-  font-size: 60px;
+  font-weight: 600;
+  font-size: 36px;
+  margin-top: 36px;
 `;
 
 export const ErrorPageNotFoundText = styled.h4`
@@ -29,21 +30,24 @@ export const ErrorPageButton = styled(NavLink)`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 180px;
-  height: 56px;
-  background: #fa3c45;
-  color: #fff;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 16px;
   line-height: 1.9;
-  border: none;
-  margin-bottom: 20px;
   text-decoration: none;
-  transition: transform 0.3s ease-in-out;
+  color: #07345a;
+  cursor: pointer;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid #07345a;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
   &:hover,
   &:focus {
-    transform: scale(1.05);
-    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
+    background-color: #ffff01;
+    border: 2px solid rgba(0, 0, 0, 0);
+    color: #ff0101;
   }
 `;

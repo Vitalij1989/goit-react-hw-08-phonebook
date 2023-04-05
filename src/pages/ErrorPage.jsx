@@ -12,11 +12,11 @@ export const ErrorPage = () => {
   return (
     <>
       <ErrorPageWrap>
-        <ErrorPageTitle>Ooops!</ErrorPageTitle>
+        <ErrorPageTitle>Huston, we have problem!!!</ErrorPageTitle>
         <img
           src={OopsImage}
           alt="404 page not found"
-          width="700"
+          width="650"
           height="350"
         />
         <ErrorPageNotFoundText>404 page not found</ErrorPageNotFoundText>
@@ -25,7 +25,7 @@ export const ErrorPage = () => {
           had its name changed or is temporarily unavailable
         </ErrorPageText>
         <ErrorPageButton to={PAGE_NAMES.homepage}>
-          GO TO HOMEPAGE
+          Go to HomePage
         </ErrorPageButton>
       </ErrorPageWrap>
     </>
